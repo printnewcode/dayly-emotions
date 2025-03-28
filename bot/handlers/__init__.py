@@ -1,0 +1,1 @@
+from .common import start, new_text ,get_dayly_writing
