@@ -62,7 +62,11 @@ def register_get_writing(message):
         bot.send_message(text="Ошибка! Попробуйте снова", chat_id=message.chat.id)
         return get_dayly_writing(message)
     user = User.objects.get(user_id=message.chat.id)
-    writing = DaylyWriting.objects.get(user=user, day=date_obj)
+    writing = DaylyWriting.objects.filter(user=user, day=date_obj)
+    if not writing.exists():
+        writing = DaylyWriting.objects.create(user=user, day=date_obj)
+    else:
+        writing = writing.first()
     if date_obj == date.today():
         if not "Ответ ИИ в этот день" in writing.writing:
             text = f"Вот ваши записи за {date_obj}\n\n"+writing.writing+f"\n\nдень ещё не закончен - напиши свои впечатления!"
