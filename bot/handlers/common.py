@@ -41,6 +41,10 @@ def register_new_text(message):
     else:
         dayly_writing.writing += message.text
     dayly_writing.save()
+    bot.send_message(
+        text="Запись добавлена успешно!",
+        chat_id=user.user_id
+    )
 def get_dayly_writing(message):
     """Получение дневных записей"""
     bot.clear_step_handler_by_chat_id(chat_id=message.chat.id)
