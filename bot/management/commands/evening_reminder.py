@@ -12,6 +12,6 @@ class Command(BaseCommand):
         users = User.objects.all()
         for user in users:
             bot.send_message(
-                text="Расскажи, как проходит твой день?🔥",
+                text="Поделись своими мыслями и впечатлениями о сегодняшнем дне! 💙",
                 chat_id=user.user_id
             )
