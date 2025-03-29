@@ -13,4 +13,4 @@ class Command(BaseCommand):
         for writing in dayly_writings:
             if writing is not None:
                 if len(writing.writing) > 0:
-                    get_ai_suggestion(text=writing.writing, user=writing.user, writing=writing)
+                    get_ai_suggestion(text=writing.writing, user=writing.user, writing=writing, status=0)

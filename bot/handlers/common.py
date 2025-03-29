@@ -54,8 +54,25 @@ def get_dayly_writing(message):
         )
     bot.register_next_step_handler(msg, register_get_writing)
 
+
+def get_ai_suggestion(text, user, writing, status):
+    """Получение ответа ИИ"""
+    response = AI_ASSISTANT.get_response(chat_id=user.user_id, text=text, model=AI_MODEL, max_token=5000)
+    response_message = response['message']
+    
+    bot.send_message(
+        text="Вот мнение искуственного интеллекта о вашем дне:\n\n"+f"__{response_message}__",
+        chat_id=user.user_id,
+        parse_mode="Markdown"
+    )
+    if status == 0:
+        writing.writing += f"\n\nОтвет ИИ в этот день: {response_message}"
+        writing.save()
+
+
 def register_get_writing(message):
     """Отправка записей за день"""
+    status = 0
     try:
         date_obj = datetime.strptime(message.text, "%Y.%m.%d").date()
     except:
@@ -72,6 +89,7 @@ def register_get_writing(message):
             text = f"Вот ваши записи за {date_obj}\n\n"+writing.writing+f"\n\nдень ещё не закончен - напиши свои впечатления!"
         else:
             text = f"Вот ваши записи за {date_obj}\n\n{writing.writing}"
+            status = 1
         if writing.writing is None:
             text="День ещё не закончен - напиши свои впечатления!"
     if date_obj < date.today():
@@ -85,16 +103,7 @@ def register_get_writing(message):
         text=text,
         chat_id=user.user_id
     )
-def get_ai_suggestion(text, user, writing):
-    """Получение ответа ИИ"""
-    response = AI_ASSISTANT.get_response(chat_id=user.user_id, text=text, model=AI_MODEL, max_token=5000)
-    response_message = response['message']
+    if status == 1:
+        get_ai_suggestion(text=writing.writing, user=user, writing = writing, status=status)
     
-    bot.send_message(
-        text="Вот мнение искуственного интеллекта о вашем дне:\n\n"+f"__{response_message}__",
-        chat_id=user.user_id,
-        parse_mode="Markdown"
-    )
-    writing.writing += f"\n\nОтвет ИИ в этот день: {response_message}"
-    writing.save()
     
