@@ -22,7 +22,7 @@ def start(message):
 def new_text(message):
     """Функция для записи мыслей о дне"""
     msg = bot.send_message(
-        text="Напишите сюда впечатления или просто свои мысли о сегодняшнем дне !",
+        text="Напишите сюда впечатления или свои мысли о сегодняшнем дне!",
         chat_id=message.chat.id
     )
     bot.register_next_step_handler(msg, register_new_text)
