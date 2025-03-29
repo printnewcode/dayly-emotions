@@ -63,8 +63,20 @@ def register_get_writing(message):
         return get_dayly_writing(message)
     user = User.objects.get(user_id=message.chat.id)
     writing = DaylyWriting.objects.get(user=user, day=date_obj)
+    if date_obj == date.today():
+        if not "Ответ ИИ в этот день" in writing.writing:
+            text = f"Вот ваши записи за {date_obj}\n\n"+writing.writing+f"\n\nдень ещё не закончен - напиши свои впечатления!"
+        if writing.writing is None:
+            text="День ещё не закончен - напиши свои впечатления!"
+    if date_obj < date.today():
+        if writing.writing is None:
+            text=f"Не смогли найти ваши записи за {date_obj}. Похоже вы не поделились ими в этот день"
+        else:
+            text=f"Вот ваши записи за {date_obj}\n\n"+writing.writing
+    if date_obj > date.today():
+        text="Этот день еще не наступил. Но я надеюсь он станет самым лучшим!"
     bot.send_message(
-        text=f"Вот ваши записи за {date_obj}\n\n"+writing.writing,
+        text=text,
         chat_id=user.user_id
     )
 def get_ai_suggestion(text, user, writing):
