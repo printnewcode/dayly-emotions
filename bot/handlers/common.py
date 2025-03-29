@@ -39,7 +39,7 @@ def register_new_text(message):
     if dayly_writing.writing is None:
         dayly_writing.writing = message.text
     else:
-        dayly_writing.writing += f" {message.text}"
+        dayly_writing.writing += f"\n{message.text}"
     dayly_writing.save()
     bot.send_message(
         text="Запись добавлена успешно!",
