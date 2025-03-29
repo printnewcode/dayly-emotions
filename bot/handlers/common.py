@@ -70,6 +70,8 @@ def register_get_writing(message):
     if date_obj == date.today():
         if not "Ответ ИИ в этот день" in writing.writing:
             text = f"Вот ваши записи за {date_obj}\n\n"+writing.writing+f"\n\nдень ещё не закончен - напиши свои впечатления!"
+        else:
+            text = f"Вот ваши записи за {date_obj}\n\n"+writing.writing"
         if writing.writing is None:
             text="День ещё не закончен - напиши свои впечатления!"
     if date_obj < date.today():
